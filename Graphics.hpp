@@ -1,5 +1,6 @@
 #include <SFML/Graphics.hpp>
 #include "./LinkedList/LinkedList.hpp"
+#include "./BinTree/BinTree.hpp"
 
 class MainWindow
 {
@@ -7,11 +8,9 @@ public:
     MainWindow();
     void menuOutput();
     void startList();
-    void testEventsList();
-    void renderList();
+    void startTree();
     sf::RenderWindow window;
+
 private:
-    LinkedList list;
-    // BinTree tree;
     sf::Font font;
 };

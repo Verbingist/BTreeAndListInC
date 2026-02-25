@@ -1,3 +1,6 @@
+#ifndef TIMER
+#define TIMER
+
 #include <chrono>
 
 class Timer
@@ -11,3 +14,5 @@ private:
     std::chrono::steady_clock::time_point start;
     std::chrono::steady_clock::time_point end;
 };
+
+#endif

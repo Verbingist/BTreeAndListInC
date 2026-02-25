@@ -1,3 +1,6 @@
+#ifndef LIST_NODE_HPP 
+#define LIST_NODE_HPP 
+
 #include "../Data.hpp"
 
 class ListNode
@@ -11,3 +14,5 @@ private:
     Data task;
     ListNode* next;
 };
+
+#endif

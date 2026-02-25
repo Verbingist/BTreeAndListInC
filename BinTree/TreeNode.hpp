@@ -1,3 +1,6 @@
+#ifndef TREE_NODE_HPP 
+#define TREE_NODE_HPP
+
 #include "../Data.hpp"
 
 class TreeNode
@@ -15,3 +18,5 @@ private:
     TreeNode *left;
     TreeNode *right;
 };
+
+#endif

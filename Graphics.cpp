@@ -1,7 +1,8 @@
 #include "Graphics.hpp"
-#include <iostream>
+#include "./BinTree/TreeGraph.hpp"
+#include "./LinkedList/ListGraph.hpp"
 
-MainWindow::MainWindow() : window(sf::VideoMode(2048, 1152), "Структуры данных")
+MainWindow::MainWindow() : window(sf::VideoMode(2048, 1152), "Data structures")
 {
     font.loadFromFile("./Assets/VMVSegaGenesis-Regular.otf");
 }
@@ -55,6 +56,7 @@ void MainWindow::menuOutput()
                 }
                 if (treeChoose.getGlobalBounds().contains(mousePos))
                 {
+                    startTree();
                 }
             }
         }
@@ -63,25 +65,14 @@ void MainWindow::menuOutput()
 
 void MainWindow::startList()
 {
-    while (window.isOpen())
-    {
-        testEventsList();
-        renderList();
-    }
+    ListGraph *graph = new ListGraph(window);
+    graph->run();
+    delete graph;
 }
 
-void MainWindow::testEventsList()
+void MainWindow::startTree()
 {
-    sf::Event event;
-    while (window.pollEvent(event))
-    {
-        if (event.type == sf::Event::Closed)
-            window.close();
-    }
-}
-
-void MainWindow::renderList()
-{
-    window.clear(sf::Color::White);
-    window.display();
+    TreeGraph *graph = new TreeGraph(window);
+    graph->run();
+    delete graph;
 }

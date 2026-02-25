@@ -1,0 +1,63 @@
+#include <SFML/Graphics.hpp>
+#include "LinkedList.hpp"
+#include "../Timer.hpp"
+#include "../Graphics/Input.hpp"
+
+class ListGraph
+{
+public:
+    ListGraph(sf::RenderWindow &window);
+    void run();
+    void render();
+    bool eventTest();
+    void infoOutput();
+
+private:
+    LinkedList list;
+    sf::RenderWindow &window;
+    sf::Font font;
+    sf::RectangleShape searchBox;
+    sf::RectangleShape addBox;
+    sf::RectangleShape deleteBox;
+    sf::RectangleShape updateBox;
+    sf::RectangleShape timeField;
+    sf::RectangleShape listInfo;
+    sf::RectangleShape loadFromFileBox;
+    sf::RectangleShape saveToFileBox;
+    sf::Text searchText;
+    sf::Text addText;
+    sf::Text deleteText;
+    sf::Text updateText;
+    sf::Text timeText;
+    sf::Text infoText;
+    sf::Text loadFromFileText;
+    sf::Text saveToFileText;
+    Input searchInput;
+    Input addInputTime;
+    Input addInputPrice;
+    Input addInputName;
+    Input deleteInputTime;
+    Input updateInputTime;
+    Input updateInputPrice;
+    Input updateInputName;
+    Input inputToFileName;
+    Input inputFromFileName;
+    Timer timer;
+
+    sf::RectangleShape searchButton;
+    sf::RectangleShape addButton;
+    sf::RectangleShape deleteButton;
+    sf::RectangleShape updateButton;
+    sf::RectangleShape loadFromFileButton;
+    sf::RectangleShape saveToFileButton;
+
+    sf::Text searchButtonText;
+    sf::Text addButtonText;
+    sf::Text deleteButtonText;
+    sf::Text updateButtonText;
+    sf::Text loadFromFileButtonText;
+    sf::Text saveToFileButtonText;
+
+    sf::Text timeOutputText;
+    sf::Text infoOutputText;
+};

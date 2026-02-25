@@ -1,3 +1,6 @@
+#ifndef BIN_TREE
+#define BIN_TREE
+
 #include "TreeNode.hpp"
 #include "../Data.hpp"
 
@@ -21,3 +24,5 @@ private:
     TreeNode *findOneUpper(TreeNode *node);
     TreeNode *findMinRight(TreeNode *node);
 };
+
+#endif

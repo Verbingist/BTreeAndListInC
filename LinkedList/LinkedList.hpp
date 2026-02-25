@@ -1,3 +1,6 @@
+#ifndef LINKED_LIST
+#define LINKED_LIST
+
 #include "ListNode.hpp"
 
 class LinkedList
@@ -13,3 +16,5 @@ public:
 private:
     ListNode *head;
 };
+
+#endif
