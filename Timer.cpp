@@ -9,7 +9,7 @@ void Timer::endTimer()
     end = std::chrono::steady_clock::now();
 }
 
-auto Timer::getTime()
+long long Timer::getTime()
 {
     return std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
 }

@@ -8,7 +8,7 @@ class Timer
 public:
     void startTimer();
     void endTimer();
-    auto getTime();
+    long long getTime();
 
 private:
     std::chrono::steady_clock::time_point start;

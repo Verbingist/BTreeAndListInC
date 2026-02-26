@@ -2,7 +2,7 @@
 
 ListNode::ListNode(Data task_data) : task(task_data), next(nullptr) {}
 
-Data ListNode::getData()
+Data& ListNode::getData()
 {
     return this->task;
 }

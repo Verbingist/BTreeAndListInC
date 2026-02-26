@@ -2,6 +2,8 @@
 #include "LinkedList.hpp"
 #include "../Timer.hpp"
 #include "../Graphics/Input.hpp"
+#include <vector>
+#include <format>
 
 class ListGraph
 {
@@ -10,10 +12,14 @@ public:
     void run();
     void render();
     bool eventTest();
-    void infoOutput();
+    void listOutput();
+    void timerOutput();
 
 private:
     LinkedList list;
+    int pageNumber;
+    std::vector<ListNode *> page;
+
     sf::RenderWindow &window;
     sf::Font font;
     sf::RectangleShape searchBox;
@@ -24,6 +30,7 @@ private:
     sf::RectangleShape listInfo;
     sf::RectangleShape loadFromFileBox;
     sf::RectangleShape saveToFileBox;
+
     sf::Text searchText;
     sf::Text addText;
     sf::Text deleteText;
@@ -32,6 +39,7 @@ private:
     sf::Text infoText;
     sf::Text loadFromFileText;
     sf::Text saveToFileText;
+
     Input searchInput;
     Input addInputTime;
     Input addInputPrice;
@@ -42,6 +50,7 @@ private:
     Input updateInputName;
     Input inputToFileName;
     Input inputFromFileName;
+
     Timer timer;
 
     sf::RectangleShape searchButton;
@@ -50,6 +59,9 @@ private:
     sf::RectangleShape updateButton;
     sf::RectangleShape loadFromFileButton;
     sf::RectangleShape saveToFileButton;
+
+    sf::RectangleShape resetButton;
+    sf::Text resetButtonText;
 
     sf::Text searchButtonText;
     sf::Text addButtonText;
@@ -60,4 +72,21 @@ private:
 
     sf::Text timeOutputText;
     sf::Text infoOutputText;
+
+    sf::RectangleShape listNode1;
+    sf::RectangleShape listNode2;
+    sf::RectangleShape listNode3;
+
+    sf::Text listNodeText1;
+    sf::Text listNodeText2;
+    sf::Text listNodeText3;
+
+    sf::RectangleShape arrow1;
+    sf::RectangleShape arrow2;
+    sf::RectangleShape arrow3;
+
+    sf::Text textLeft;
+    sf::Text textRight;
+
+    bool stopUpdating;
 };

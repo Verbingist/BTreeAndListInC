@@ -7,7 +7,7 @@ class ListNode
 {
 public:
     ListNode(Data task_data);
-    Data getData();
+    Data& getData();
     ListNode* getNext();
     void setNext(ListNode* nextNode);
 private:

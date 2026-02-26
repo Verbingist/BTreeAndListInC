@@ -1,5 +1,4 @@
 #include "ListGraph.hpp"
-#include <string>
 
 ListGraph::ListGraph(sf::RenderWindow &window) : window(window),
                                                  searchInput(font, {110.f, 160.f}, {280.f, 50.f}),
@@ -10,10 +9,11 @@ ListGraph::ListGraph(sf::RenderWindow &window) : window(window),
                                                  updateInputTime(font, {1310, 150}, {280, 40}),
                                                  updateInputPrice(font, {1310, 195}, {280, 40}),
                                                  updateInputName(font, {1310, 240}, {280, 40}),
-                                                 inputToFileName(font, {1710, 690}, {280, 50}),
-                                                 inputFromFileName(font, {1710, 930}, {280, 50})
+                                                 inputToFileName(font, {1710, 930}, {280, 50}),
+                                                 inputFromFileName(font, {1710, 690}, {280, 50})
 {
     font.loadFromFile("./Assets/VMVSegaGenesis-Regular.otf");
+    pageNumber = 1;
 
     searchBox.setSize(sf::Vector2f(300.f, 300.f));
     searchBox.setFillColor(sf::Color::Black);
@@ -116,6 +116,16 @@ ListGraph::ListGraph(sf::RenderWindow &window) : window(window),
     searchButtonText.setFillColor(sf::Color::Black);
     searchButtonText.setPosition(185.f, 330.f);
 
+    resetButton.setSize(sf::Vector2f(280.f, 70.f));
+    resetButton.setFillColor(sf::Color::White);
+    resetButton.setPosition(110.f, 230.f);
+
+    resetButtonText.setFont(font);
+    resetButtonText.setString("Reset");
+    resetButtonText.setCharacterSize(32);
+    resetButtonText.setFillColor(sf::Color::Black);
+    resetButtonText.setPosition(170.f, 250.f);
+
     addButton.setSize(sf::Vector2f(280.f, 70.f));
     addButton.setFillColor(sf::Color::White);
     addButton.setPosition(510.f, 310.f);
@@ -165,6 +175,20 @@ ListGraph::ListGraph(sf::RenderWindow &window) : window(window),
     saveToFileButtonText.setCharacterSize(26);
     saveToFileButtonText.setFillColor(sf::Color::Black);
     saveToFileButtonText.setPosition(1795.f, 1000.f);
+
+    textLeft.setFont(font);
+    textLeft.setString("<- Left");
+    textLeft.setCharacterSize(32);
+    textLeft.setFillColor(sf::Color::Black);
+    textLeft.setPosition(500.f, 1050.f);
+
+    textRight.setFont(font);
+    textRight.setString("Right ->");
+    textRight.setCharacterSize(32);
+    textRight.setFillColor(sf::Color::Black);
+    textRight.setPosition(1000.f, 1050.f);
+
+    stopUpdating = false;
 }
 
 void ListGraph::run()
@@ -175,8 +199,8 @@ void ListGraph::run()
         {
             return;
         }
-        infoOutput();
         render();
+        listOutput();
     }
 }
 
@@ -194,6 +218,79 @@ bool ListGraph::eventTest()
                 return true;
             }
         }
+        if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left)
+        {
+            sf::Vector2f mousePos(event.mouseButton.x, event.mouseButton.y);
+            if (addButton.getGlobalBounds().contains(mousePos))
+            {
+                timer.startTimer();
+                list.addNode(Data(std::stoll(addInputTime.getValue()), std::stof(addInputPrice.getValue()), addInputName.getValue()));
+                timer.endTimer();
+                timerOutput();
+            }
+            if (deleteButton.getGlobalBounds().contains(mousePos))
+            {
+                timer.startTimer();
+                list.deleteNode(std::stoll(deleteInputTime.getValue()));
+                timer.endTimer();
+                timerOutput();
+            }
+            if (updateButton.getGlobalBounds().contains(mousePos))
+            {
+                timer.startTimer();
+                list.updateNode(std::stoll(updateInputTime.getValue()), Data(std::stoll(updateInputTime.getValue()), std::stof(updateInputPrice.getValue()), updateInputName.getValue()));
+                timer.endTimer();
+                timerOutput();
+            }
+            if (searchButton.getGlobalBounds().contains(mousePos))
+            {
+                timer.startTimer();
+                ListNode *found = list.getNode(std::stoll(searchInput.getValue()));
+                timer.endTimer();
+                timerOutput();
+                page[0] = found;
+                page[1] = nullptr;
+                page[2] = nullptr;
+                stopUpdating = true;
+                pageNumber = 1;
+            }
+            if (resetButton.getGlobalBounds().contains(mousePos))
+            {
+                stopUpdating = false;
+                pageNumber = 1;
+            }
+            if (saveToFileButton.getGlobalBounds().contains(mousePos))
+            {
+                timer.startTimer();
+                list.saveToFile(inputToFileName.getValue());
+                timer.endTimer();
+                timerOutput();
+                pageNumber = 1;
+            }
+            if (loadFromFileButton.getGlobalBounds().contains(mousePos))
+            {
+                timer.startTimer();
+                list.loadFromFile(inputFromFileName.getValue());
+                timer.endTimer();
+                timerOutput();
+                pageNumber = 1;
+            }
+        }
+        if (event.type == sf::Event::KeyPressed)
+        {
+            if (event.key.code == sf::Keyboard::Left)
+            {
+                if (pageNumber > 1)
+                {
+                    pageNumber--;
+                }
+            }
+            if (event.key.code == sf::Keyboard::Right)
+            {
+                if (pageNumber * 3 < list.getSize())
+                    pageNumber++;
+            }
+        }
         searchInput.handleEvent(event);
         addInputTime.handleEvent(event);
         addInputPrice.handleEvent(event);
@@ -208,14 +305,110 @@ bool ListGraph::eventTest()
     return false;
 }
 
-void ListGraph::infoOutput()
+void ListGraph::timerOutput()
 {
-    int size = list.getSize();
-    infoOutputText.setString("Size " + std::to_string(size));
+    timeOutputText.setString("  " + std::to_string(timer.getTime()) + "uS");
+}
+
+void ListGraph::listOutput()
+{
+    listNode1.setFillColor(sf::Color::White);
+    listNode2.setFillColor(sf::Color::White);
+    listNode3.setFillColor(sf::Color::White);
+    arrow1.setFillColor(sf::Color::White);
+    arrow2.setFillColor(sf::Color::White);
+    arrow3.setFillColor(sf::Color::White);
+
+    if (!stopUpdating)
+    {
+        page = list.getPageELements(pageNumber);
+    }
+
+    listNode1.setSize(sf::Vector2f(450.f, 250.f));
+    listNode1.setFillColor(sf::Color::Black);
+    listNode1.setPosition(150.f, 600.f);
+
+    listNodeText1.setFont(font);
+
+    listNodeText1.setCharacterSize(24);
+    listNodeText1.setFillColor(sf::Color::White);
+    listNodeText1.setPosition(160.f, 610.f);
+
+    if (page[0] != nullptr)
+    {
+        listNodeText1.setString(
+            "Time " + std::to_string(page[0]->getData().getTime()) +
+            "\n\nPrice " + std::to_string(page[0]->getData().getPrice()) +
+            "\n\nName " + page[0]->getData().getName());
+
+        arrow1.setSize(sf::Vector2f(50.f, 30.f));
+        arrow1.setFillColor(sf::Color::Black);
+        arrow1.setPosition(600.f, 700.f);
+    }
+    else
+    {
+        listNodeText1.setString("NULLPTR");
+        return;
+    }
+
+    listNode2.setSize(sf::Vector2f(450.f, 250.f));
+    listNode2.setFillColor(sf::Color::Black);
+    listNode2.setPosition(650.f, 600.f);
+
+    listNodeText2.setFont(font);
+    listNodeText2.setCharacterSize(24);
+    listNodeText2.setFillColor(sf::Color::White);
+    listNodeText2.setPosition(660.f, 610.f);
+
+    if (page[1] != nullptr)
+    {
+        listNodeText2.setString(
+            "Time " + std::to_string(page[1]->getData().getTime()) +
+            "\n\nPrice " + std::to_string(page[1]->getData().getPrice()) +
+            "\n\nName " + page[1]->getData().getName());
+
+        arrow2.setSize(sf::Vector2f(50.f, 30.f));
+        arrow2.setFillColor(sf::Color::Black);
+        arrow2.setPosition(1100.f, 700.f);
+    }
+    else
+    {
+        listNodeText2.setString("NULLPTR");
+        return;
+    }
+
+    listNode3.setSize(sf::Vector2f(450.f, 250.f));
+    listNode3.setFillColor(sf::Color::Black);
+    listNode3.setPosition(1150.f, 600.f);
+
+    listNodeText3.setFont(font);
+    listNodeText3.setCharacterSize(24);
+    listNodeText3.setFillColor(sf::Color::White);
+    listNodeText3.setPosition(1160.f, 610.f);
+
+    if (page[2] != nullptr)
+    {
+        listNodeText3.setString(
+            "Time " + std::to_string(page[2]->getData().getTime()) +
+            "\n\nPrice " + std::to_string(page[2]->getData().getPrice()) +
+            "\n\nName " + page[2]->getData().getName());
+
+        arrow3.setSize(sf::Vector2f(50.f, 30.f));
+        arrow3.setFillColor(sf::Color::Black);
+        arrow3.setPosition(1600.f, 700.f);
+    }
+    else
+    {
+        listNodeText3.setString("NULLPTR");
+        return;
+    }
 }
 
 void ListGraph::render()
 {
+    int size = list.getSize();
+    infoOutputText.setString("Size " + std::to_string(size));
+
     window.clear(sf::Color::White);
     window.draw(searchBox);
     window.draw(addBox);
@@ -257,5 +450,18 @@ void ListGraph::render()
     window.draw(updateButtonText);
     window.draw(loadFromFileButtonText);
     window.draw(saveToFileButtonText);
+    window.draw(listNode1);
+    window.draw(listNode2);
+    window.draw(listNode3);
+    window.draw(listNodeText1);
+    window.draw(listNodeText2);
+    window.draw(listNodeText3);
+    window.draw(arrow1);
+    window.draw(arrow2);
+    window.draw(arrow3);
+    window.draw(textLeft);
+    window.draw(textRight);
+    window.draw(resetButton);
+    window.draw(resetButtonText);
     window.display();
 }

@@ -110,3 +110,91 @@ int LinkedList::getSize()
         ;
     return i;
 }
+
+bool LinkedList::loadFromFile(std::string filePath)
+{
+    std::ifstream inFile(filePath);
+    if (!inFile)
+    {
+        return false;
+    }
+
+    std::string file_time = "";
+    std::string file_price = "";
+    std::string file_name = "";
+    std::string subString = "";
+
+    memoryClear();
+
+    try
+    {
+
+        while (std::getline(inFile, file_time) && std::getline(inFile, file_price) && std::getline(inFile, file_name) && std::getline(inFile, subString))
+        {
+            Data tempData = Data(std::stoll(file_time), std::stof(file_price), file_name);
+            addNode(tempData);
+        }
+    }
+
+    catch (...)
+    {
+        std::cout << "ERROR WHILE READING FILE" << std::endl;
+        return false;
+    }
+
+    inFile.close();
+    return true;
+}
+
+bool LinkedList::saveToFile(std::string filePath)
+{
+    std::ofstream outFile(filePath);
+    if (!outFile)
+    {
+        return false;
+    }
+    for (ListNode *cur = head; cur != nullptr; cur = cur->getNext())
+    {
+        outFile << cur->getData().getTime() << "\n"
+                << cur->getData().getPrice() << "\n"
+                << cur->getData().getName() << "\n"
+                << std::endl;
+    }
+    outFile.close();
+    return true;
+}
+
+void LinkedList::memoryClear()
+{
+    if (head == nullptr)
+        return;
+    ListNode *cur = head;
+    while (cur != nullptr)
+    {
+        ListNode *deletedNode = cur;
+        cur = cur->getNext();
+        delete deletedNode;
+    }
+    head = nullptr;
+}
+
+std::vector<ListNode *> LinkedList::getPageELements(int page)
+{
+    std::vector<ListNode *> resultVector(3, nullptr);
+
+    int start = page * 3 - 2;
+    int end = page * 3;
+
+    int element = 1;
+    int i = 0;
+
+    for (ListNode *cur = head; cur != nullptr; cur = cur->getNext(), element++)
+    {
+        if (element >= start && element <= end)
+        {
+            resultVector[i++] = cur;
+        }
+    }
+
+    return resultVector;
+}

@@ -1,3 +1,6 @@
+#ifndef INPUT
+#define INPUT
+
 #include <SFML/Graphics.hpp>
 #include <string>
 
@@ -14,3 +17,5 @@ private:
     std::string input;
     bool focused;
 };
+
+#endif
