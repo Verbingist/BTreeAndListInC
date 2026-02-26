@@ -13,7 +13,8 @@ TreeGraph::TreeGraph(sf::RenderWindow &window) : window(window),
                                                  inputFromFileName(font, {1710, 690}, {280, 50})
 {
     font.loadFromFile("./Assets/VMVSegaGenesis-Regular.otf");
-    pageNumber = 1;
+    pageNumber = 0;
+    page = tree.getPageElements(pageNumber, nullptr);
 
     searchBox.setSize(sf::Vector2f(300.f, 300.f));
     searchBox.setFillColor(sf::Color::Black);
@@ -176,17 +177,23 @@ TreeGraph::TreeGraph(sf::RenderWindow &window) : window(window),
     saveToFileButtonText.setFillColor(sf::Color::Black);
     saveToFileButtonText.setPosition(1795.f, 1000.f);
 
+    textUp.setFont(font);
+    textUp.setString("Up");
+    textUp.setCharacterSize(32);
+    textUp.setFillColor(sf::Color::Black);
+    textUp.setPosition(830.f, 1050.f);
+
     textLeft.setFont(font);
     textLeft.setString("<- Left");
     textLeft.setCharacterSize(32);
     textLeft.setFillColor(sf::Color::Black);
-    textLeft.setPosition(500.f, 1050.f);
+    textLeft.setPosition(400.f, 1050.f);
 
     textRight.setFont(font);
     textRight.setString("Right ->");
     textRight.setCharacterSize(32);
     textRight.setFillColor(sf::Color::Black);
-    textRight.setPosition(1000.f, 1050.f);
+    textRight.setPosition(1100.f, 1050.f);
 
     stopUpdating = false;
 }
@@ -200,7 +207,7 @@ void TreeGraph::run()
             return;
         }
         render();
-        // treeOutput();
+        treeOutput();
     }
 }
 
@@ -227,6 +234,7 @@ bool TreeGraph::eventTest()
                 tree.addNode(Data(std::stoll(addInputTime.getValue()), std::stof(addInputPrice.getValue()), addInputName.getValue()));
                 timer.endTimer();
                 timerOutput();
+                updatePages();
             }
             if (deleteButton.getGlobalBounds().contains(mousePos))
             {
@@ -234,6 +242,7 @@ bool TreeGraph::eventTest()
                 tree.deleteNode(std::stoll(deleteInputTime.getValue()));
                 timer.endTimer();
                 timerOutput();
+                updatePages();
             }
             if (updateButton.getGlobalBounds().contains(mousePos))
             {
@@ -241,6 +250,7 @@ bool TreeGraph::eventTest()
                 tree.updateNode(std::stoll(updateInputTime.getValue()), Data(std::stoll(updateInputTime.getValue()), std::stof(updateInputPrice.getValue()), updateInputName.getValue()));
                 timer.endTimer();
                 timerOutput();
+                updatePages();
             }
             if (searchButton.getGlobalBounds().contains(mousePos))
             {
@@ -252,43 +262,55 @@ bool TreeGraph::eventTest()
                 page[1] = nullptr;
                 page[2] = nullptr;
                 stopUpdating = true;
-                pageNumber = 1;
             }
             if (resetButton.getGlobalBounds().contains(mousePos))
             {
                 stopUpdating = false;
-                pageNumber = 1;
+                page = tree.getPageElements(pageNumber, nullptr);
             }
             if (saveToFileButton.getGlobalBounds().contains(mousePos))
             {
                 timer.startTimer();
-                // tree.saveToFile(inputToFileName.getValue());
+                tree.saveToFile(inputToFileName.getValue());
                 timer.endTimer();
                 timerOutput();
-                pageNumber = 1;
+                pageNumber = 0;
             }
             if (loadFromFileButton.getGlobalBounds().contains(mousePos))
             {
                 timer.startTimer();
-                // tree.loadFromFile(inputFromFileName.getValue());
+                tree.loadFromFile(inputFromFileName.getValue());
                 timer.endTimer();
                 timerOutput();
-                pageNumber = 1;
+                pageNumber = 0;
+                page = tree.getPageElements(pageNumber, nullptr);
             }
         }
         if (event.type == sf::Event::KeyPressed)
         {
             if (event.key.code == sf::Keyboard::Left)
             {
-                if (pageNumber > 1)
+                pageNumber = -1;
+                if (!stopUpdating)
                 {
-                    pageNumber--;
+                    page = tree.getPageElements(pageNumber, page[0]);
                 }
             }
             if (event.key.code == sf::Keyboard::Right)
             {
-                if (pageNumber * 3 < tree.getSize())
-                    pageNumber++;
+                pageNumber = 1;
+                if (!stopUpdating)
+                {
+                    page = tree.getPageElements(pageNumber, page[0]);
+                }
+            }
+            if (event.key.code == sf::Keyboard::Up)
+            {
+                pageNumber = 0;
+                if (!stopUpdating)
+                {
+                    page = tree.getPageElements(pageNumber, page[0]);
+                }
             }
         }
         searchInput.handleEvent(event);
@@ -310,28 +332,28 @@ void TreeGraph::timerOutput()
     timeOutputText.setString("  " + std::to_string(timer.getTime()) + "uS");
 }
 
+void TreeGraph::updatePages()
+{
+    page = tree.getPageElements(pageNumber, page[0]);
+}
+
 void TreeGraph::treeOutput()
 {
+
     treeNode1.setFillColor(sf::Color::White);
     treeNode2.setFillColor(sf::Color::White);
     treeNode3.setFillColor(sf::Color::White);
     arrow1.setFillColor(sf::Color::White);
     arrow2.setFillColor(sf::Color::White);
 
-    if (!stopUpdating)
-    {
-        // page = tree.getPageELements(pageNumber);
-    }
-
     treeNode1.setSize(sf::Vector2f(450.f, 250.f));
     treeNode1.setFillColor(sf::Color::Black);
-    treeNode1.setPosition(150.f, 600.f);
+    treeNode1.setPosition(650.f, 500.f);
 
     treeNodeText1.setFont(font);
-
     treeNodeText1.setCharacterSize(24);
     treeNodeText1.setFillColor(sf::Color::White);
-    treeNodeText1.setPosition(160.f, 610.f);
+    treeNodeText1.setPosition(660.f, 510.f);
 
     if (page[0] != nullptr)
     {
@@ -339,25 +361,24 @@ void TreeGraph::treeOutput()
             "Time " + std::to_string(page[0]->getData().getTime()) +
             "\n\nPrice " + std::to_string(page[0]->getData().getPrice()) +
             "\n\nName " + page[0]->getData().getName());
-
-        arrow1.setSize(sf::Vector2f(50.f, 30.f));
-        arrow1.setFillColor(sf::Color::Black);
-        arrow1.setPosition(600.f, 700.f);
     }
     else
     {
         treeNodeText1.setString("NULLPTR");
-        return;
     }
+
+    arrow1.setSize(sf::Vector2f(50.f, 30.f));
+    arrow1.setFillColor(sf::Color::Black);
+    arrow1.setPosition(600.f, 720.f);
 
     treeNode2.setSize(sf::Vector2f(450.f, 250.f));
     treeNode2.setFillColor(sf::Color::Black);
-    treeNode2.setPosition(650.f, 600.f);
+    treeNode2.setPosition(150.f, 720.f);
 
     treeNodeText2.setFont(font);
     treeNodeText2.setCharacterSize(24);
     treeNodeText2.setFillColor(sf::Color::White);
-    treeNodeText2.setPosition(660.f, 610.f);
+    treeNodeText2.setPosition(160.f, 730.f);
 
     if (page[1] != nullptr)
     {
@@ -365,25 +386,24 @@ void TreeGraph::treeOutput()
             "Time " + std::to_string(page[1]->getData().getTime()) +
             "\n\nPrice " + std::to_string(page[1]->getData().getPrice()) +
             "\n\nName " + page[1]->getData().getName());
-
-        arrow2.setSize(sf::Vector2f(50.f, 30.f));
-        arrow2.setFillColor(sf::Color::Black);
-        arrow2.setPosition(1100.f, 700.f);
     }
     else
     {
         treeNodeText2.setString("NULLPTR");
-        return;
     }
+
+    arrow2.setSize(sf::Vector2f(50.f, 30.f));
+    arrow2.setFillColor(sf::Color::Black);
+    arrow2.setPosition(1100.f, 720.f);
 
     treeNode3.setSize(sf::Vector2f(450.f, 250.f));
     treeNode3.setFillColor(sf::Color::Black);
-    treeNode3.setPosition(1150.f, 600.f);
+    treeNode3.setPosition(1150.f, 720.f);
 
     treeNodeText3.setFont(font);
     treeNodeText3.setCharacterSize(24);
     treeNodeText3.setFillColor(sf::Color::White);
-    treeNodeText3.setPosition(1160.f, 610.f);
+    treeNodeText3.setPosition(1160.f, 730.f);
 
     if (page[2] != nullptr)
     {
@@ -395,7 +415,6 @@ void TreeGraph::treeOutput()
     else
     {
         treeNodeText3.setString("NULLPTR");
-        return;
     }
 }
 
@@ -403,7 +422,11 @@ void TreeGraph::render()
 {
     int size = tree.getSize();
     int depth = tree.getDepth();
-    infoOutputText.setString("Size " + std::to_string(size) + "\nDepth " + std::to_string(depth));
+    int leafs = tree.getNumberOfLeafs();
+    infoOutputText.setString(
+        "Size " + std::to_string(size) +
+        "\nDepth " + std::to_string(depth) +
+        "\nLeafs " + std::to_string(leafs));
 
     window.clear(sf::Color::White);
     window.draw(searchBox);
@@ -458,5 +481,6 @@ void TreeGraph::render()
     window.draw(textRight);
     window.draw(resetButton);
     window.draw(resetButtonText);
+    window.draw(textUp);
     window.display();
 }

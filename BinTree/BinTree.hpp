@@ -3,6 +3,9 @@
 
 #include "TreeNode.hpp"
 #include "../Data.hpp"
+#include <vector>
+#include <iostream>
+#include <fstream>
 
 class BinTree
 {
@@ -14,6 +17,12 @@ public:
     bool updateNode(time_t time, Data task_data);
     int getSize();
     int getDepth();
+    bool loadFromFile(std::string filePath);
+    bool saveToFile(std::string filePath);
+    void memoryClear();
+    void memoryClear(TreeNode *node);
+    std::vector<TreeNode *> getPageElements(int number, TreeNode *prevHead);
+    int getNumberOfLeafs();
 
 private:
     TreeNode *head;
@@ -23,6 +32,8 @@ private:
     int getDepth(TreeNode *node);
     TreeNode *findOneUpper(TreeNode *node);
     TreeNode *findMinRight(TreeNode *node);
+    void saveNodeToFile(std::ofstream &descriptor, TreeNode *node);
+    int getNumberOfLeafs(TreeNode *node);
 };
 
 #endif

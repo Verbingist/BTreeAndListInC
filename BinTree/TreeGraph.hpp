@@ -14,6 +14,7 @@ public:
     bool eventTest();
     void treeOutput();
     void timerOutput();
+    void updatePages();
 
 private:
     BinTree tree;
@@ -85,6 +86,7 @@ private:
     sf::RectangleShape arrow2;
 
     sf::Text textLeft;
+    sf::Text textUp;
     sf::Text textRight;
 
     bool stopUpdating;
