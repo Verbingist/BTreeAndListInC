@@ -232,7 +232,7 @@ bool TreeGraph::eventTest()
             if (addButton.getGlobalBounds().contains(mousePos))
             {
                 timer.startTimer();
-                tree.addNode(Data(std::stoll(addInputTime.getValue()), std::stof(addInputPrice.getValue()), addInputName.getValue()));
+                tree.addNode(std::stoll(addInputTime.getValue()), std::stof(addInputPrice.getValue()), addInputName.getValue());
                 timer.endTimer();
                 timerOutput();
                 updatePages();
@@ -248,7 +248,7 @@ bool TreeGraph::eventTest()
             if (updateButton.getGlobalBounds().contains(mousePos))
             {
                 timer.startTimer();
-                tree.updateNode(std::stoll(updateInputTime.getValue()), Data(std::stoll(updateInputTime.getValue()), std::stof(updateInputPrice.getValue()), updateInputName.getValue()));
+                tree.updateNode(std::stoll(updateInputTime.getValue()), std::stof(updateInputPrice.getValue()), updateInputName.getValue());
                 timer.endTimer();
                 timerOutput();
                 updatePages();
@@ -359,7 +359,8 @@ void TreeGraph::treeOutput()
     if (page[0] != nullptr)
     {
         treeNodeText1.setString(
-            "Time " + std::to_string(page[0]->getData().getTime()) +
+            "Id " + std::to_string(page[0]->getData().getId()) +
+            "\n\nTime " + std::to_string(page[0]->getData().getTime()) +
             "\n\nPrice " + std::to_string(page[0]->getData().getPrice()) +
             "\n\nName " + page[0]->getData().getName());
     }
@@ -384,7 +385,8 @@ void TreeGraph::treeOutput()
     if (page[1] != nullptr)
     {
         treeNodeText2.setString(
-            "Time " + std::to_string(page[1]->getData().getTime()) +
+            "Id " + std::to_string(page[1]->getData().getId()) +
+            "\n\nTime " + std::to_string(page[1]->getData().getTime()) +
             "\n\nPrice " + std::to_string(page[1]->getData().getPrice()) +
             "\n\nName " + page[1]->getData().getName());
     }
@@ -409,7 +411,8 @@ void TreeGraph::treeOutput()
     if (page[2] != nullptr)
     {
         treeNodeText3.setString(
-            "Time " + std::to_string(page[2]->getData().getTime()) +
+            "Id " + std::to_string(page[2]->getData().getId()) +
+            "\n\nTime " + std::to_string(page[2]->getData().getTime()) +
             "\n\nPrice " + std::to_string(page[2]->getData().getPrice()) +
             "\n\nName " + page[2]->getData().getName());
     }

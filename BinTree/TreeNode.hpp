@@ -6,7 +6,7 @@
 class TreeNode
 {
 public:
-    TreeNode(Data task_data);
+    TreeNode(time_t time, float price, std::string name, int id);
     Data &getData();
     TreeNode *getLeft();
     TreeNode *getRight();

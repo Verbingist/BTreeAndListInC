@@ -9,6 +9,7 @@ public:
     void menuOutput();
     void startList();
     void startTree();
+    void startAWL();
     sf::RenderWindow window;
 
 private:

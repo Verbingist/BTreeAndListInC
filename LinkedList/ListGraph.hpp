@@ -45,6 +45,7 @@ private:
     Input addInputPrice;
     Input addInputName;
     Input deleteInputTime;
+    Input updateInputId;
     Input updateInputTime;
     Input updateInputPrice;
     Input updateInputName;

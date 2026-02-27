@@ -1,6 +1,6 @@
 #include "ListNode.hpp"
 
-ListNode::ListNode(Data task_data) : task(task_data), next(nullptr) {}
+ListNode::ListNode(time_t time, float price, std::string name, int id) : task(time, price, name, id), next(nullptr) {}
 
 Data& ListNode::getData()
 {

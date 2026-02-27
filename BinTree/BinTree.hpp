@@ -12,9 +12,9 @@ class BinTree
 public:
     BinTree();
     TreeNode *getNode(time_t time);
-    bool addNode(Data task_data);
+    bool addNode(time_t time, float price, std::string name);
     bool deleteNode(time_t time);
-    bool updateNode(time_t time, Data task_data);
+    bool updateNode(time_t time, float price, std::string name);
     int getSize();
     int getDepth();
     bool loadFromFile(std::string filePath);
@@ -25,6 +25,7 @@ public:
     int getNumberOfLeafs();
 
 private:
+    int lastId;
     TreeNode *head;
     TreeNode *getNode(time_t time, TreeNode *node);
     TreeNode *addNode(TreeNode *newNode, TreeNode *node);

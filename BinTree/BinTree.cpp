@@ -1,6 +1,6 @@
 #include "BinTree.hpp"
 
-BinTree::BinTree() : head(nullptr) {}
+BinTree::BinTree() : head(nullptr), lastId(0) {}
 
 TreeNode *BinTree::getNode(time_t time)
 {
@@ -24,14 +24,11 @@ TreeNode *BinTree::getNode(time_t time, TreeNode *node)
     return node;
 }
 
-bool BinTree::addNode(Data task_data)
+bool BinTree::addNode(time_t time, float price, std::string name)
 {
-    if (getNode(task_data.getTime()))
-    {
-        return false;
-    }
-    TreeNode *newNode = new TreeNode(task_data);
+    TreeNode *newNode = new TreeNode(time, price, name, lastId);
     head = addNode(newNode, head);
+    lastId++;
     return true;
 }
 
@@ -52,15 +49,15 @@ TreeNode *BinTree::addNode(TreeNode *newNode, TreeNode *node)
     return node;
 }
 
-bool BinTree::updateNode(time_t time, Data task_data)
+bool BinTree::updateNode(time_t time, float price, std::string name)
 {
     TreeNode *node = getNode(time);
     if (node == nullptr)
     {
         return false;
     }
-    node->getData().setName(task_data.getName());
-    node->getData().setPrice(task_data.getPrice());
+    node->getData().setName(name);
+    node->getData().setPrice(price);
     return true;
 }
 
@@ -272,8 +269,7 @@ bool BinTree::loadFromFile(std::string filePath)
 
         while (std::getline(inFile, file_time) && std::getline(inFile, file_price) && std::getline(inFile, file_name) && std::getline(inFile, subString))
         {
-            Data tempData = Data(std::stoll(file_time), std::stof(file_price), file_name);
-            addNode(tempData);
+            addNode(std::stoll(file_time), std::stof(file_price), file_name);
         }
     }
 

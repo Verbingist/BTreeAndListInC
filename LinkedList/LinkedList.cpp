@@ -1,8 +1,8 @@
 #include "LinkedList.hpp"
 
-LinkedList::LinkedList() : head(nullptr) {}
+LinkedList::LinkedList() : head(nullptr), tail(nullptr), lastId(0) {}
 
-ListNode *LinkedList::getNode(time_t time)
+ListNode *LinkedList::getNode(int id)
 {
     if (head == nullptr)
     {
@@ -11,7 +11,7 @@ ListNode *LinkedList::getNode(time_t time)
 
     for (ListNode *cur = head; cur != nullptr; cur = cur->getNext())
     {
-        if (cur->getData().getTime() == time)
+        if (cur->getData().getId() == id)
         {
             return cur;
         }
@@ -20,58 +20,42 @@ ListNode *LinkedList::getNode(time_t time)
     return nullptr;
 }
 
-bool LinkedList::addNode(Data task_data)
+bool LinkedList::addNode(time_t time, float price, std::string name)
 {
-    ListNode *newNode = new ListNode(task_data);
+    ListNode *newNode = new ListNode(time, price, name, lastId);
+
     if (head == nullptr)
     {
         head = newNode;
+        tail = head;
+        lastId++;
         return true;
     }
-    ListNode *cur = head;
-    time_t newTime = task_data.getTime();
 
-    if (head->getData().getTime() == newTime)
-    {
-        delete newNode;
-        return false;
-    }
-
-    for (; cur->getNext() != nullptr; cur = cur->getNext())
-    {
-        if (newTime == cur->getNext()->getData().getTime())
-        {
-            delete newNode;
-            return false;
-        }
-    }
-
-    if (cur->getData().getTime() == newTime)
-    {
-        delete newNode;
-        return false;
-    }
-
-    cur->setNext(newNode);
+    tail->setNext(newNode);
+    tail = newNode;
+    lastId++;
     return true;
 }
 
-bool LinkedList::deleteNode(time_t time)
+bool LinkedList::deleteNode(int id)
 {
     if (head == nullptr)
     {
         return false;
     }
-    if (head->getData().getTime() == time)
+
+    if (head->getData().getId() == id)
     {
         ListNode *deletedTemp = head;
         head = head->getNext();
         delete deletedTemp;
         return true;
     }
+
     for (ListNode *prew = head, *cur = head->getNext(); cur != nullptr; prew = prew->getNext(), cur = cur->getNext())
     {
-        if (cur->getData().getTime() == time)
+        if (cur->getData().getId() == id)
         {
             prew->setNext(cur->getNext());
             delete cur;
@@ -81,18 +65,20 @@ bool LinkedList::deleteNode(time_t time)
     return false;
 }
 
-bool LinkedList::updateNode(time_t time, Data task_data)
+bool LinkedList::updateNode(int id, time_t time, float price, std::string name)
 {
     if (head == nullptr)
     {
         return false;
     }
+
     for (ListNode *cur = head; cur != nullptr; cur = cur->getNext())
     {
-        if (cur->getData().getTime() == time)
+        if (cur->getData().getId() == id)
         {
-            cur->getData().setName(task_data.getName());
-            cur->getData().setPrice(task_data.getPrice());
+            cur->getData().setTime(time);
+            cur->getData().setName(name);
+            cur->getData().setPrice(price);
             return true;
         }
     }
@@ -128,11 +114,9 @@ bool LinkedList::loadFromFile(std::string filePath)
 
     try
     {
-
         while (std::getline(inFile, file_time) && std::getline(inFile, file_price) && std::getline(inFile, file_name) && std::getline(inFile, subString))
         {
-            Data tempData = Data(std::stoll(file_time), std::stof(file_price), file_name);
-            addNode(tempData);
+            addNode(std::stoll(file_time), std::stof(file_price), file_name);
         }
     }
 
@@ -176,6 +160,7 @@ void LinkedList::memoryClear()
         delete deletedNode;
     }
     head = nullptr;
+    tail = nullptr;
 }
 
 std::vector<ListNode *> LinkedList::getPageELements(int page)

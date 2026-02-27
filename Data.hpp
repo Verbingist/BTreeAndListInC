@@ -7,7 +7,8 @@
 class Data
 {
 public:
-    Data(time_t time, float price, std::string name);
+    Data(time_t time, float price, std::string name, int id);
+    int getId();
     time_t getTime();
     float getPrice();
     std::string getName();
@@ -16,6 +17,7 @@ public:
     void setName(std::string name);
 
 private:
+    int id;
     time_t start_task_time;
     float task_price;
     std::string task_name;

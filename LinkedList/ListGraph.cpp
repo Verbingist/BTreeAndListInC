@@ -6,9 +6,10 @@ ListGraph::ListGraph(sf::RenderWindow &window) : window(window),
                                                  addInputPrice(font, {510, 195}, {280, 40}),
                                                  addInputName(font, {510, 240}, {280, 40}),
                                                  deleteInputTime(font, {910, 160}, {280, 50}),
-                                                 updateInputTime(font, {1310, 150}, {280, 40}),
-                                                 updateInputPrice(font, {1310, 195}, {280, 40}),
-                                                 updateInputName(font, {1310, 240}, {280, 40}),
+                                                 updateInputId(font, {1310, 150}, {280, 30}),
+                                                 updateInputTime(font, {1310, 190}, {280, 30}),
+                                                 updateInputPrice(font, {1310, 230}, {280, 30}),
+                                                 updateInputName(font, {1310, 270}, {280, 30}),
                                                  inputToFileName(font, {1710, 930}, {280, 50}),
                                                  inputFromFileName(font, {1710, 690}, {280, 50})
 {
@@ -225,7 +226,7 @@ bool ListGraph::eventTest()
             if (addButton.getGlobalBounds().contains(mousePos))
             {
                 timer.startTimer();
-                list.addNode(Data(std::stoll(addInputTime.getValue()), std::stof(addInputPrice.getValue()), addInputName.getValue()));
+                list.addNode(std::stoll(addInputTime.getValue()), std::stof(addInputPrice.getValue()), addInputName.getValue());
                 timer.endTimer();
                 timerOutput();
             }
@@ -239,7 +240,7 @@ bool ListGraph::eventTest()
             if (updateButton.getGlobalBounds().contains(mousePos))
             {
                 timer.startTimer();
-                list.updateNode(std::stoll(updateInputTime.getValue()), Data(std::stoll(updateInputTime.getValue()), std::stof(updateInputPrice.getValue()), updateInputName.getValue()));
+                list.updateNode(std::stoi(updateInputId.getValue()), std::stoll(updateInputTime.getValue()), std::stof(updateInputPrice.getValue()), updateInputName.getValue());
                 timer.endTimer();
                 timerOutput();
             }
@@ -300,6 +301,7 @@ bool ListGraph::eventTest()
         updateInputName.handleEvent(event);
         updateInputPrice.handleEvent(event);
         updateInputTime.handleEvent(event);
+        updateInputId.handleEvent(event);
         inputToFileName.handleEvent(event);
         inputFromFileName.handleEvent(event);
     }
@@ -338,7 +340,8 @@ void ListGraph::listOutput()
     if (page[0] != nullptr)
     {
         listNodeText1.setString(
-            "Time " + std::to_string(page[0]->getData().getTime()) +
+            "Id " + std::to_string(page[0]->getData().getId()) +
+            "\n\nTime " + std::to_string(page[0]->getData().getTime()) +
             "\n\nPrice " + std::to_string(page[0]->getData().getPrice()) +
             "\n\nName " + page[0]->getData().getName());
 
@@ -364,7 +367,8 @@ void ListGraph::listOutput()
     if (page[1] != nullptr)
     {
         listNodeText2.setString(
-            "Time " + std::to_string(page[1]->getData().getTime()) +
+            "Id " + std::to_string(page[1]->getData().getId()) +
+            "\n\nTime " + std::to_string(page[1]->getData().getTime()) +
             "\n\nPrice " + std::to_string(page[1]->getData().getPrice()) +
             "\n\nName " + page[1]->getData().getName());
 
@@ -390,7 +394,8 @@ void ListGraph::listOutput()
     if (page[2] != nullptr)
     {
         listNodeText3.setString(
-            "Time " + std::to_string(page[2]->getData().getTime()) +
+            "Id " + std::to_string(page[2]->getData().getId()) +
+            "\n\nTime " + std::to_string(page[2]->getData().getTime()) +
             "\n\nPrice " + std::to_string(page[2]->getData().getPrice()) +
             "\n\nName " + page[2]->getData().getName());
 
@@ -435,6 +440,7 @@ void ListGraph::render()
     updateInputName.draw(window);
     updateInputPrice.draw(window);
     updateInputTime.draw(window);
+    updateInputId.draw(window);
     inputFromFileName.draw(window);
     inputToFileName.draw(window);
     window.draw(timeOutputText);

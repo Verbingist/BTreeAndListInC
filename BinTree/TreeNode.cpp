@@ -1,6 +1,6 @@
 #include "TreeNode.hpp"
 
-TreeNode::TreeNode(Data task_data) : task(task_data), left(nullptr), right(nullptr) {}
+TreeNode::TreeNode(time_t time, float price, std::string name, int id) : task(time, price, name, id), left(nullptr), right(nullptr) {}
 
 Data &TreeNode::getData()
 {

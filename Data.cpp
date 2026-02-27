@@ -1,10 +1,15 @@
 #include "Data.hpp"
 
-Data::Data(time_t time, float price, std::string name)
+Data::Data(time_t time, float price, std::string name, int id)
 {
+    this->id = id;
     this->setTime(time);
     this->setPrice(price);
     this->setName(name);
+}
+
+int Data::getId() {
+    return this->id;
 }
 
 time_t Data::getTime()

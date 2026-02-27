@@ -11,10 +11,10 @@ class LinkedList
 {
 public:
     LinkedList();
-    ListNode *getNode(time_t time);
-    bool addNode(Data task_data);
-    bool deleteNode(time_t time);
-    bool updateNode(time_t time, Data task_data);
+    ListNode *getNode(int id);
+    bool addNode(time_t time, float price, std::string name);
+    bool deleteNode(int id);
+    bool updateNode(int id, time_t time, float price, std::string name);
     int getSize();
     bool loadFromFile(std::string filePath);
     bool saveToFile(std::string filePath);
@@ -22,7 +22,9 @@ public:
     std::vector<ListNode*> getPageELements(int page);
 
 private:
+    int lastId;
     ListNode *head;
+    ListNode *tail;
 };
 
 #endif
