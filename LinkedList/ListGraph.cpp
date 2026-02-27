@@ -215,6 +215,7 @@ bool ListGraph::eventTest()
         {
             if (event.key.code == sf::Keyboard::Escape)
             {
+                list.memoryClear();
                 return true;
             }
         }

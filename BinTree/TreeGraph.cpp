@@ -222,6 +222,7 @@ bool TreeGraph::eventTest()
         {
             if (event.key.code == sf::Keyboard::Escape)
             {
+                tree.memoryClear();
                 return true;
             }
         }

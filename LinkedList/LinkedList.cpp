@@ -39,7 +39,7 @@ bool LinkedList::addNode(Data task_data)
 
     for (; cur->getNext() != nullptr; cur = cur->getNext())
     {
-        if (newTime == cur->getData().getTime())
+        if (newTime == cur->getNext()->getData().getTime())
         {
             delete newNode;
             return false;
@@ -190,7 +190,7 @@ std::vector<ListNode *> LinkedList::getPageELements(int page)
 
     for (ListNode *cur = head; cur != nullptr; cur = cur->getNext(), element++)
     {
-        if (element >= start && element <= end)
+        if (element >= start && element <= end && i < 3)
         {
             resultVector[i++] = cur;
         }
