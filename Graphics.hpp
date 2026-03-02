@@ -1,6 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include "./LinkedList/LinkedList.hpp"
 #include "./BinTree/BinTree.hpp"
+#include "./AWLTree/AWLGraph.hpp"
 
 class MainWindow
 {

@@ -71,9 +71,9 @@ void MainWindow::menuOutput()
                 {
                     startTree();
                 }
-                if (treeChoose.getGlobalBounds().contains(mousePos))
+                if (awlChoose.getGlobalBounds().contains(mousePos))
                 {
-                    startTree();
+                    startAWL();
                 }
             }
         }
@@ -96,5 +96,7 @@ void MainWindow::startTree()
 
 void MainWindow::startAWL()
 {
-    // реализовать
+    AWLGraph *graph = new AWLGraph(window);
+    graph->run();
+    delete graph;
 }
