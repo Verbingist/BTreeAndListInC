@@ -1,15 +1,17 @@
 #include "Timer.hpp"
 
+extern "C" long long getSystemTime();
+
 void Timer::startTimer()
 {
-    start = std::chrono::steady_clock::now();
+    start = getSystemTime();
 }
 void Timer::endTimer()
 {
-    end = std::chrono::steady_clock::now();
+    end = getSystemTime();
 }
 
 long long Timer::getTime()
 {
-    return std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
+    return end - start;
 }
