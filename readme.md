@@ -1,1 +1,1 @@
-g++ $(find . -name "*.cpp")     -lsfml-graphics -lsfml-window -lsfml-system     -o cppgraph
+g++ $(find . -name "*.cpp") Timer.s -lsfml-graphics -lsfml-window -lsfml-system -o cppgraph

@@ -6,7 +6,7 @@
 class ListNode
 {
 public:
-    ListNode(time_t time, float price, std::string name, int id);
+    ListNode(time_t time, float price, std::string name, int lastId);
     Data& getData();
     ListNode* getNext();
     void setNext(ListNode* nextNode);

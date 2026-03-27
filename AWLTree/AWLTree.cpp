@@ -114,7 +114,8 @@ AWLNode *AWLTree::doubleRotateLeft(AWLNode *parentNode)
 
 AWLNode *AWLTree::balanceTree(AWLNode *node)
 {
-    if (node == nullptr) {
+    if (node == nullptr)
+    {
         return node;
     }
     node->setIndex(node->getLocalDepth(node->getRight()) - node->getLocalDepth(node->getLeft()));
@@ -311,8 +312,9 @@ bool AWLTree::deleteNode(int id)
         delete node;
     }
 
-    for (AWLNode *balanced = balanceTree(globalParent), *upper = findOneUpper(globalParent); globalParent != nullptr; globalParent = upper)
+    for (AWLNode *upper = findOneUpper(globalParent); globalParent != nullptr; globalParent = upper, upper = findOneUpper(globalParent))
     {
+        AWLNode *balanced = balanceTree(globalParent);
         if (upper == nullptr)
         {
             head = balanced;
