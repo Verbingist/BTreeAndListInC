@@ -17,6 +17,7 @@ public:
     long getMaxSize();
     bool loadFromFile(std::string filePath);
     bool saveToFile(std::string filePath);
+    bool saveAddressesToCSV(std::string filePath);
     void memoryClear();
     std::vector<HashMapNode*> getPageELements(int page);
 

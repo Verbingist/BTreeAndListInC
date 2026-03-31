@@ -10,7 +10,7 @@ BloomFilter::BloomFilter(long size, long expectedElements) : bloomfiltermap(size
 
 long BloomFilter::hashFunction(long key)
 {
-    return (key + 1234) * 654321 % size;
+    return (key + 1239) * 654321 % size;
 }
 
 long BloomFilter::hash(long key, long hashNumber)

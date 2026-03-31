@@ -9,7 +9,7 @@ HashMap::HashMap(long size) : bloomfilter(size * 10, size)
 
 long HashMap::hash(time_t timekey)
 {
-    return (timekey << 3) * 9518426 % tableSize;
+    return (timekey << 8) + 9518422 % tableSize;
 }
 
 bool HashMap::addElem(time_t time, float price, std::string name)
@@ -166,6 +166,30 @@ bool HashMap::saveToFile(std::string filePath)
                     << hashTable[i].getNumberOfAddressGenerations() << "\n"
                     << hashTable[i].getState() << "\n"
                     << std::endl;
+        }
+    }
+
+    outFile.close();
+    return true;
+}
+
+bool HashMap::saveAddressesToCSV(std::string filePath)
+{
+    std::ofstream outFile(filePath);
+    if (!outFile)
+    {
+        return false;
+    }
+
+    outFile << "address,numberOfAddressGenerations\n";
+
+    for (int i = 0; i < tableSize; i++)
+    {
+        if (hashTable[i].getState() == 1)
+        {
+            outFile << hashTable[i].getAddress() << ","
+                    << hashTable[i].getNumberOfAddressGenerations()
+                    << "\n";
         }
     }
 

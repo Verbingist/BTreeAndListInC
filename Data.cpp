@@ -41,3 +41,7 @@ void Data::setName(std::string name)
 {
     this->task_name = name;
 }
+
+void Data::setID(int id) {
+    this->id = id;
+}

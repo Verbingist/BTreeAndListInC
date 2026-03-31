@@ -2,8 +2,8 @@
 #include "./LinkedList/LinkedList.hpp"
 #include "./BinTree/BinTree.hpp"
 #include "./AWLTree/AWLGraph.hpp"
-#include "HashMap/HashGraph.hpp"
-#include "BTree/BTreeGraph.hpp"
+#include "./HashMap/HashGraph.hpp"
+#include "./BTree/BTreeGraph.hpp"
 
 class MainWindow
 {

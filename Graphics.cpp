@@ -144,7 +144,7 @@ void MainWindow::startHash()
 
 void MainWindow::startBTree()
 {
-    // AWLGraph *graph = new AWLGraph(window);
-    // graph->run();
-    // delete graph;
+    BTreeGraph *graph = new BTreeGraph(window);
+    graph->run();
+    delete graph;
 }

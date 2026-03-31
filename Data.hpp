@@ -15,6 +15,7 @@ public:
     void setTime(time_t time);
     void setPrice(float price);
     void setName(std::string name);
+    void setID(int id);
 
 private:
     int id;
